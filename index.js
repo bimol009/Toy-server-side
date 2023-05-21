@@ -32,17 +32,13 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
+    // await client.connect();
     // Send a ping to confirm a successful connection
 
     const carsCollection = client.db("ToyAddSection").collection("serviceToy");
     const specialAddCar = client.db("ToyAddSection").collection("bookings");
 
-    // app.get("/AllToyShow", async (req, res) => {
-    //   const cursor = carsCollection.find();
-    //   const result = await cursor.toArray();
-    //   res.send(result);
-    // });
+
 
     app.get("/AllToyShow", async (req, res) => {
       const page = parseInt(req.query.page) || 1;
@@ -56,12 +52,12 @@ async function run() {
         .find()
         .skip(skip)
         .limit(limit)
-        .sort({ price: 1 })
+        .sort({ price: -1 })
         .toArray();
 
       const formattedResult = result.map((car) => ({
         ...car,
-        price: parseFloat(car.price),
+        price: (car.price),
       }));
 
       res.send({
@@ -144,7 +140,7 @@ async function run() {
             name :updateToy.name, quantity :updateToy.quantity, quantity :updateToy.quantity, about :updateToy.about, photo :updateToy.photo
         }
     }
-      const result = await specialAddCar.updateOne(toy,filter,options)
+      const result = await specialAddCar.updateOne(filter,toy,options)
       res.send(result)
   })
 
