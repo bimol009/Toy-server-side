@@ -38,21 +38,19 @@ async function run() {
     const carsCollection = client.db("ToyAddSection").collection("serviceToy");
     const specialAddCar = client.db("ToyAddSection").collection("bookings");
 
- 
-
     app.get("/AllToyShow", async (req, res) => {
       const page = parseInt(req.query.page) || 1;
       const limit = 20;
       const skip = (page - 1) * limit;
-     
+
       const totalCount = await carsCollection.countDocuments();
       const totalPages = Math.ceil(totalCount / limit);
 
       const result = await carsCollection
-        
+        .find()
         .skip(skip)
         .limit(limit)
-
+        .sort({ price: -1 })
         .toArray();
 
       const formattedResult = result.map((car) => ({
@@ -65,17 +63,6 @@ async function run() {
         page: page,
         totalPages: totalPages,
       });
-
-      app.get("/AllToyShow",async(req,res)=>{
-        const query = {};
-        const sort = req.query.sort;
-        const options = {
-          sort: { price: sort === "asc" ? 1 : -1 },
-        };
-        const cursor = carsCollection.find(query, options);
-        const result = await cursor.toArray();
-        res.send(result)
-      })
     });
     app.get("/sportsCar", async (req, res) => {
       const query = { category: "sports car" };
