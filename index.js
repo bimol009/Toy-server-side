@@ -38,8 +38,6 @@ async function run() {
     const carsCollection = client.db("ToyAddSection").collection("serviceToy");
     const specialAddCar = client.db("ToyAddSection").collection("bookings");
 
-
-
     app.get("/AllToyShow", async (req, res) => {
       const page = parseInt(req.query.page) || 1;
       const limit = 20;
@@ -57,7 +55,7 @@ async function run() {
 
       const formattedResult = result.map((car) => ({
         ...car,
-        price: (car.price),
+        price: car.price,
       }));
 
       res.send({
@@ -129,20 +127,23 @@ async function run() {
       res.send(result);
     });
 
-    app.put('/addBook/:id',async(req,res)=>{
-      const id=req.params.id;
-      const filter = {_id: new ObjectId(id)} 
-      const options = {upsert:true}
+    app.put("/addBook/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
+      const options = { upsert: true };
       const updateToy = req.body;
-      console.log("update",updateToy)
+      console.log("update", updateToy);
       const toy = {
-        $set:{
-            name :updateToy.name, quantity :updateToy.quantity, quantity :updateToy.quantity, about :updateToy.about, photo :updateToy.photo
-        }
-    }
-      const result = await specialAddCar.updateOne(filter,toy,options)
-      res.send(result)
-  })
+        $set: {
+          name: updateToy.name,
+          quantity: updateToy.quantity,
+          about: updateToy.about,
+          photo: updateToy.photo,
+        },
+      };
+      const result = await specialAddCar.updateOne(filter, toy, options);
+      res.send(result);
+    });
 
     await client.db("admin").command({ ping: 1 });
     console.log(
