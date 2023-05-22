@@ -104,13 +104,13 @@ async function run() {
 
     app.post("/addBook", async (req, res) => {
       const specialBook = req.body;
-      console.log(specialBook);
+     
       const result = await specialAddCar.insertOne(specialBook);
       res.send(result);
     });
 
     app.get("/addBook", async (req, res) => {
-      console.log(req.query);
+      
       let query = {};
       if (req.query?.email) {
         query = { email: req.query.email };
@@ -123,7 +123,7 @@ async function run() {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await specialAddCar.deleteOne(query);
-      console.log(result);
+     
       res.send(result);
     });
 
@@ -132,7 +132,7 @@ async function run() {
       const filter = { _id: new ObjectId(id) };
       const options = { upsert: true };
       const updateToy = req.body;
-      console.log("update", updateToy);
+      
       const toy = {
         $set: {
           name: updateToy.name,
